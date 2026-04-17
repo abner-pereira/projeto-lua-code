@@ -3,15 +3,12 @@
 	print("Olá Lua!")
 ]]
 -- Comentário de Linha
-print("Digite seu nome: ")
 
 -- Global Variables
-Nome = io.read("*l") --"*l" >> ler até o final da linha
+Nome = "Júlio"
 
 -- Local Variables
 local sobreNome = "Santos"
-
-print("Seu nome é", Nome, "!")
 
 -- Types and Values
 -- Function Type >> Return type name
@@ -24,6 +21,6 @@ local show = print
 print("Valor:", show, "| Tipo:", type(show)) -- function
 
 --[[
-Marcador - Onde paramos...
-https://www.lua.org/pil/2.html
+Onde parei...
+https://www.lua.org/pil/2.1.html
 ]]
