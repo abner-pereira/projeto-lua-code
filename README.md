@@ -25,4 +25,4 @@
 
 #### Fonte:
 + [Programming in Lua (first edition)](https://www.lua.org/pil/contents.html)
-+ [Lua 5.1 Reference Manual](https://www.lua.org/manual/5.1/manual.html#2.4.7)
++ [Lua 5.1 Reference Manual](https://www.lua.org/manual/5.1/manual.html)
