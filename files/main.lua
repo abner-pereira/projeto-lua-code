@@ -71,10 +71,11 @@ end
 -- Tipo "Tables" - Similaridade ao "Objeto" em Javascript
 -- Índice começando com 1 (UM)
 -- NÃO EXISTE campo de armazenamento contendo o tamanho do Array
-local itemAvulso = { "A", "Letra B" } -- like Javascript Array
-itemAvulso["CC"] = "Letra C"          -- like Javascript Object (Key String)
-itemAvulso[40] = "D"                  -- like Javascript Object (Key Number)
-itemAvulso.E = "Letra E"              -- like Javascript Objetc (key Variavel)
+-- Duas forma de construção: List-style e Record-style
+local itemAvulso = { "A", "Letra B" } -- like Javascript Array - List-style
+itemAvulso["CC"] = "Letra C"          -- like Javascript Object (Key String) - Record-style
+itemAvulso[40] = "D"                  -- like Javascript Object (Key Number) - Record-style
+itemAvulso.E = "Letra E"              -- like Javascript Objetc (key Variavel) - Record-style
 
 print("Tables like Object => Key: CC | Valor: " .. itemAvulso.CC)
 print("Tables like Object => Key: 40 | Valor: " .. itemAvulso[40])
@@ -84,7 +85,69 @@ for idx, line in ipairs(itemAvulso) do
 	print("Tables For IPAIRS >> Índice:", idx, "| Valor:", line)
 end
 
+-- Tipo "Functions"
+-- Similar ao Javascript
+local calcSum = function(param1, param2)
+	print("Function => Resultado da Soma:", param1 + param2)
+end
+
+calcSum(15, 25)
+
+-- com Callback
+function ShowMax()
+	return "Valor Maior que Zero"
+end
+
+function ShowMin()
+	return "Valor Menor que Zero"
+end
+
+function ShowMain(paramFuncOk, paramFuncError, num)
+	local res
+	if num >= 0 then
+		res = paramFuncOk()
+	else
+		res = paramFuncError()
+	end
+	print("Function => Valor: " .. tostring(num), "| Msg: " .. res)
+end
+
+ShowMain(ShowMax, ShowMin, -10)
+
+-- Exclusão de uma Função
+calcSum = nil
+ShowMain = nil
+ShowMax = nil
+ShowMin = nil
+
+-- Operadores Relacionais
+-- ( < ,  > , <= , >= , == , ~= [tíl e igual])
+local objA = {}
+local objB = {}
+objA.x = 10; objA.y = 5
+objB.x = 10; objB.y = 5
+
+local objC = objA
+
+-- Objetos por Referência
+if objA ~= objB then
+	print("Comparativo => ObjA vs ObjB: \"Objetos Diferentes\" -", objA, objB)
+end
+
+if objA == objC then
+	print("Comparativo => ObjA vs ObjC: \"Objetos Iguais\" -", objA, objC)
+end
+
+-- Operadores Lógicos
+-- ( and , or , not )
+local printSix = not false
+if printSix then
+	print("Operador => Msg: Valor 6 (seis) deve ser impresso.")
+end
+
+-- Assignment Destructuring
+
 --[[
 Onde parei...
-https://www.lua.org/pil/2.6.html
+https://www.lua.org/pil/4.html
 ]]
