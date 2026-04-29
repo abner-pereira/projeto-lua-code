@@ -13,6 +13,9 @@ luac.out
 *.obj
 *.elf
 
+# Criado Manualmente
+files/mainCompare.js
+
 # Precompiled Headers
 *.gch
 *.pch

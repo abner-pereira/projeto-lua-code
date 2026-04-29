@@ -82,7 +82,7 @@ print("Tables like Object => Key: 40 | Valor: " .. itemAvulso[40])
 
 -- Função IPAIRS >> Usado para extrair todos os itens de um Array numa iteração
 for idx, line in ipairs(itemAvulso) do
-	print("Tables For IPAIRS >> Índice:", idx, "| Valor:", line)
+	print("Tables For IPAIRS => Índice:", idx, "| Valor:", line)
 end
 
 -- Tipo "Functions"
@@ -145,9 +145,68 @@ if printSix then
 	print("Operador => Msg: Valor 6 (seis) deve ser impresso.")
 end
 
--- Assignment Destructuring
+-- Atribuição com Desestruturação (Assignment Destructuring)
+local letterA, letterB = "A", "B"
+print("Desestruturação => Primeira Letra: " .. letterA .. ", Segunda Letra: " .. letterB)
+
+letterA, letterB = letterB, letterA
+print("Desestruturação (swap) => Primeira Inversão: " .. letterA .. ", Segunda Inversão: " .. letterB)
+
+local letterC = "C", "D", "E"
+print("Desestruturação (Descarte) => Terceira Letra:", letterC)
+
+-- Controle de Estruturas
+-- do, if, while, repet, for
+-- break e return
+
+-- Bloco local (do .. end)
+do
+	local letterD = "D"
+end
+print("Do .. end => Variavel de Bloco:", letterD) -- Valor nil
+
+-- Condicional (if .. elseif .. else .. end)
+local bairro = "Barra"
+if bairro == "Bangu"
+then
+	print("If .. elseif .. else .. end => Bairro Mais Quente:", bairro)
+elseif bairro == "Barra"
+then
+	print("If .. elseif .. else .. end => Bairro com Maior Custo/Benefício:", bairro)
+elseif bairro == "Copacabana"
+then
+	print("If .. elseif .. else .. end => Bairro Mais Caro:", bairro)
+else
+	print("If .. elseif .. else .. end => Bairro Diferente:", bairro)
+end
+
+-- Iteração (while .. do .. end)
+local doFirst = true
+while doFirst do
+	print("While .. do .. end => Primeiro:", doFirst)
+	doFirst = nil
+end
+
+-- Iteração (repeat .. until)
+local repeatFirst = false
+repeat
+	print("Repeat .. until => Não é o Primeiro:", repeatFirst)
+until not repeatFirst
+
+-- Iteração (Numeric for)
+for idx = 1, 5, 1 do -- Terceiro parâmetro pode ser implícito ("+1")
+	print("Numeric for => Posição:", idx)
+	break            -- Sair
+end
+
+-- Iteração (Generic for)
+-- Usado com Iterator (Ex.: PAIRS -> Key and Value)
+local tAnimal = { "Cabra", "Cavalo" }
+for key, value in pairs(tAnimal) do
+	print("Generic for => Chave:", key, ", valor:", value)
+end
 
 --[[
 Onde parei...
-https://www.lua.org/pil/4.html
+https://www.lua.org/pil/4.4.html
 ]]
