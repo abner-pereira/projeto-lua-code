@@ -206,7 +206,56 @@ for key, value in pairs(tAnimal) do
 	print("Generic for => Chave:", key, ", valor:", value)
 end
 
+-- Break e Return
+-- break  => for, repeat, or while (somente)
+-- return => function - COM ou SEM valor
+repeat
+	print("Break => Nr Repetições: 1 (UM)")
+	break -- Sair
+until true
+
+local funRet = function()
+	print("Function with Return => Retorno COM e/ou SEM valor:", true)
+	do -- Retornar SEM Valor
+		return
+	end
+	print("Function with Return => Não exibir esta mensagem:", true)
+end
+
+funRet()
+
+-- Função com Multi-resultado
+local setMultResult = function(a)
+	-- (a) é opcional e "nil" quando NÃO informado
+	local nrA, nrB = 25, 55
+	return nrA, nrB
+end
+
+print("Nultiple Results Function => Valores retornados:", setMultResult())
+
+-- COM descarte de valores retornados
+local nrA = setMultResult()
+
+-- Função com Mult-argumento (...)
+-- Possui 1 (UMA) variavel interna: (arg -> array)
+local setMultArgs = function(...)
+	print(arg.n)
+
+	local idx = 1
+	while true do
+		if arg[idx] == nil then
+			break
+		end
+		print("Variable Number of Arguments => Chave:", idx, ", Valor:", arg[idx])
+		idx = idx + 1
+	end
+end
+
+local varMultArgs = { 10, 15, 20 }
+setMultArgs(10, 20, 30)
+
+
 --[[
 Onde parei...
-https://www.lua.org/pil/4.4.html
+https://www.lua.org/pil/5.2.html
 ]]
