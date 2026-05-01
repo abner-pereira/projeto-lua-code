@@ -203,7 +203,7 @@ end
 -- Usado com Iterator (Ex.: PAIRS -> Key and Value)
 local tAnimal = { "Cabra", "Cavalo" }
 for key, value in pairs(tAnimal) do
-	print("Generic for => Chave:", key, ", valor:", value)
+	print("Generic for => Chave:", key, "| valor:", value)
 end
 
 -- Break e Return
@@ -236,26 +236,27 @@ print("Nultiple Results Function => Valores retornados:", setMultResult())
 -- COM descarte de valores retornados
 local nrA = setMultResult()
 
--- Função com Mult-argumento (...)
--- Possui 1 (UMA) variavel interna: (arg -> array)
+-- Função com Multi-argumento (...)
+-- Possui 1 (UMA) variavel interna: {...} -> Array
 local setMultArgs = function(...)
-	print(arg.n)
-
-	local idx = 1
-	while true do
-		if arg[idx] == nil then
-			break
-		end
-		print("Variable Number of Arguments => Chave:", idx, ", Valor:", arg[idx])
-		idx = idx + 1
+	local args = { ... } -- Atribuição
+	for idx, value in ipairs(args) do
+		print("Variable Number of Arguments => Chave:", idx, "| Valor:", value)
 	end
 end
 
-local varMultArgs = { 10, 15, 20 }
-setMultArgs(10, 20, 30)
+setMultArgs(150, 245)
+
+-- Função com Argumentos Nomeados
+local setNameArgs = function(id, marca, precoFinal)
+	print("Named Arguments => ID:", tostring(id), "| Marca:", marca, "| Preço:", tostring(precoFinal))
+end
+
+local varNameArgs = { id = 1, marca = "Dell", valorNormal = nil, valorDesc = 2099.99 }
+setNameArgs(varNameArgs.id, varNameArgs.marca, varNameArgs.valorNormal or varNameArgs.valorDesc)
 
 
 --[[
 Onde parei...
-https://www.lua.org/pil/5.2.html
+https://www.lua.org/pil/6.html
 ]]
