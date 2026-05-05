@@ -241,7 +241,7 @@ local nrA = setMultResult()
 local setMultArgs = function(...)
 	local args = { ... } -- Atribuição
 	for idx, value in ipairs(args) do
-		print("Variable Number of Arguments => Chave:", idx, "| Valor:", value)
+		print("Variable Number of Arguments => Índice:", idx, "| Valor:", value)
 	end
 end
 
@@ -255,8 +255,29 @@ end
 local varNameArgs = { id = 1, marca = "Dell", valorNormal = nil, valorDesc = 2099.99 }
 setNameArgs(varNameArgs.id, varNameArgs.marca, varNameArgs.valorNormal or varNameArgs.valorDesc)
 
+-- Escopo Léxico (Lexical Scoping)
+local objPerson = {
+	nome = "Alexandre",
+	getIdade = function(anoNasc)
+		local anoAtual = 2026
+		return anoAtual - anoNasc
+	end
+}
+
+print("Lexical Scorping => Nome:", objPerson.nome, "| Idade:", objPerson.getIdade(1985))
+
+-- Função com Closure
+local funcGlobal = function(nomeTime, anoCampeonato)
+	local ultAno = 2026 - anoCampeonato
+	return function() -- Closure -> Função Anônima
+		print("Function with Closure => Time:", nomeTime, "| Tempo do Título:", ultAno, "ano(s)")
+	end
+end
+
+local funcClosure = funcGlobal("Palmeiras", 2025)
+funcClosure()
 
 --[[
 Onde parei...
-https://www.lua.org/pil/6.html
+https://www.lua.org/pil/6.1.html
 ]]
