@@ -267,17 +267,32 @@ local objPerson = {
 print("Lexical Scorping => Nome:", objPerson.nome, "| Idade:", objPerson.getIdade(1985))
 
 -- Função com Closure
-local funcGlobal = function(nomeTime, anoCampeonato)
+local funcClosure = function(nomeTime, anoCampeonato)
 	local ultAno = 2026 - anoCampeonato
 	return function() -- Closure -> Função Anônima
-		print("Function with Closure => Time:", nomeTime, "| Tempo do Título:", ultAno, "ano(s)")
+		return "Time: " .. nomeTime .. " | Tempo do Título: " .. ultAno .. " ano(s)"
 	end
 end
 
-local funcClosure = funcGlobal("Palmeiras", 2025)
-funcClosure()
+local funcResClosure = funcClosure("Palmeiras", 2025) -- Passagem por Referência
+print("Function with Closure =>", funcResClosure())
+
+local funcClosureTwo = function(profileKey)
+	if profileKey ~= "ADM" then
+		return function() -- Closure -> Função Anônima
+			return "Erro - Não Autorizado (" .. profileKey .. ")"
+		end
+	else
+		return function() -- Closure -> Função Anônima
+			return "Ok - Autorizado (" .. profileKey .. ")"
+		end
+	end
+end
+
+local funcResClosureTwo = funcClosureTwo("ADM") -- Passagem por Referência
+print("Function with Closure => Log:", funcResClosureTwo())
 
 --[[
 Onde parei...
-https://www.lua.org/pil/6.1.html
+https://www.lua.org/pil/6.2.html
 ]]
