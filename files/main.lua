@@ -292,7 +292,37 @@ end
 local funcResClosureTwo = funcClosureTwo("ADM") -- Passagem por Referência
 print("Function with Closure => Log:", funcResClosureTwo())
 
+-- Função Local
+-- Formato Um
+local funcLocalOne = function()
+	print("Non-Global Functions => Formato Um")
+end
+
+funcLocalOne()
+
+-- Formato Dois
+local function funcLocalTwo()
+	print("Non-Global Functions => Formato Dois")
+end
+
+funcLocalTwo()
+
+--Formato Três e Quatro (Like Objeto)
+LocalFuncObj = {
+	funcLocalThree = function()
+		print("Non-Global Functions => Formato Objeto Um")
+	end
+}
+
+LocalFuncObj.funcLocalThree()
+
+LocalFuncObj.funcLocalFour = function()
+	print("Non-Global Functions => Formato Objeto Dois")
+end
+
+LocalFuncObj.funcLocalFour()
+
 --[[
 Onde parei...
-https://www.lua.org/pil/6.2.html
+https://www.lua.org/pil/7.html
 ]]
