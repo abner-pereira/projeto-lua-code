@@ -307,7 +307,7 @@ end
 
 funcLocalTwo()
 
---Formato Três e Quatro (Like Objeto)
+-- Formato Três e Quatro (Like Objeto)
 LocalFuncObj = {
 	funcLocalThree = function()
 		print("Non-Global Functions => Formato Objeto Um")
