@@ -322,6 +322,55 @@ end
 
 LocalFuncObj.funcLocalFour()
 
+-- Iterators and Closures
+local iterFactory = function(paramList)
+	local idx = 0
+	return function() -- Passagem por Referência
+		idx = idx + 1
+		if paramList[idx] ~= nil then
+			return idx, paramList[idx]
+		else
+			return nil
+		end
+	end
+end
+
+-- With "Generic for"
+for index, value in iterFactory({ 100, 200 }) do
+	print("Iterators and Closures (With Generic For) => My-Index: " .. index .. " | My-Value: " .. value)
+end
+
+-- Without "Generic for"
+local iterWhile = iterFactory({ 110, 120 })
+while true do
+	local idx, value = iterWhile()
+	if idx ~= nil then
+		print("Iterators and Closures (Without Generic For) => My-Index: " .. idx .. " | My-Value: " .. value)
+	else
+		break
+	end
+end
+
+-- Stateless Iterators
+local iterFuncA = function(paramListNow, posNow)
+	posNow = posNow + 1
+	if paramListNow[posNow] == nil then
+		return nil
+	else
+		return posNow, paramListNow[posNow]
+	end
+end
+
+local iterFuncAFactory = function(paramList)
+	local pos = 0
+	-- The iterator function, an invariant state, and a control variable.
+	return iterFuncA, paramList, pos
+end
+
+for idx, value in iterFuncAFactory({ "A", "B", "C" }) do
+	print("Iterators and Closures (Stateless) => My-Index: " .. idx .. " | My-Value: " .. value)
+end
+
 --[[
 Onde parei...
 https://www.lua.org/pil/7.html
