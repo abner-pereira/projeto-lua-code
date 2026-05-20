@@ -4,13 +4,13 @@
 ]]
 -- Comentário de Linha
 
--- Variavel Global
+-- Global Variables
 Nome = "Júlio"
 
--- Variavel Local
+-- Local Variables
 local sobreNome = "Santos"
 
--- Tipos e Valores
+-- Types and Values
 -- Função TYPE >> Retorna o "Nome do Tipo"
 print("Valor:", sobreNome, "| Tipo:", type(sobreNome)) -- string
 print("Valor:", 100, "| Tipo:", type(100))             -- number
@@ -20,7 +20,7 @@ print("Valor:", nil, "| Tipo:", type(nil))             -- null/delete
 local show = print
 print("Valor:", show, "| Tipo:", type(show)) -- function
 
--- Exclusão de Variavel (Limeza de Memória)
+-- Exclusão de Variavel (Limpeza de Memória)
 Nome = nil
 print("Deleção:", Nome)
 
@@ -120,7 +120,7 @@ ShowMain = nil
 ShowMax = nil
 ShowMin = nil
 
--- Operadores Relacionais
+-- Relational Operators (Operadores Relacionais)
 -- ( < ,  > , <= , >= , == , ~= [tíl e igual])
 local objA = {}
 local objB = {}
@@ -138,7 +138,7 @@ if objA == objC then
 	print("Comparativo => ObjA vs ObjC: \"Objetos Iguais\" -", objA, objC)
 end
 
--- Operadores Lógicos
+-- Logical Operators (Operadores Lógicos)
 -- ( and , or , not )
 local printSix = not false
 if printSix then
@@ -155,11 +155,11 @@ print("Desestruturação (swap) => Primeira Inversão: " .. letterA .. ", Segund
 local letterC = "C", "D", "E"
 print("Desestruturação (Descarte) => Terceira Letra:", letterC)
 
--- Controle de Estruturas
+-- Control Structures (Controle de Estruturas)
 -- do, if, while, repet, for
 -- break e return
 
--- Bloco local (do .. end)
+-- Local Variables and Blocks (Bloco local - do .. end)
 do
 	local letterD = "D"
 end
@@ -224,6 +224,7 @@ end
 
 funRet()
 
+-- Functions
 -- Função com Multi-resultado
 local setMultResult = function(a)
 	-- (a) é opcional e "nil" quando NÃO informado
@@ -255,7 +256,7 @@ end
 local varNameArgs = { id = 1, marca = "Dell", valorNormal = nil, valorDesc = 2099.99 }
 setNameArgs(varNameArgs.id, varNameArgs.marca, varNameArgs.valorNormal or varNameArgs.valorDesc)
 
--- Escopo Léxico (Lexical Scoping)
+-- Lexical Scoping (Escopo Léxico)
 local objPerson = {
 	nome = "Alexandre",
 	getIdade = function(anoNasc)
@@ -266,6 +267,7 @@ local objPerson = {
 
 print("Lexical Scorping => Nome:", objPerson.nome, "| Idade:", objPerson.getIdade(1985))
 
+-- More about Functions (Mais sobre Funções)
 -- Função com Closure
 local funcClosure = function(nomeTime, anoCampeonato)
 	local ultAno = 2026 - anoCampeonato
@@ -322,7 +324,7 @@ end
 
 LocalFuncObj.funcLocalFour()
 
--- Iterators and Closures
+-- Iterators and Closures (Iteradores)
 local iterFactory = function(paramList)
 	local idx = 0
 	return function() -- Passagem por Referência
@@ -335,12 +337,12 @@ local iterFactory = function(paramList)
 	end
 end
 
--- With "Generic for"
+-- COM "Generic for"
 for index, value in iterFactory({ 100, 200 }) do
 	print("Iterators and Closures (With Generic For) => My-Index: " .. index .. " | My-Value: " .. value)
 end
 
--- Without "Generic for"
+-- SEM "Generic for"
 local iterWhile = iterFactory({ 110, 120 })
 while true do
 	local idx, value = iterWhile()
@@ -371,7 +373,21 @@ for idx, value in iterFuncAFactory({ "A", "B", "C" }) do
 	print("Iterators and Closures (Stateless) => My-Index: " .. idx .. " | My-Value: " .. value)
 end
 
+-- Compilation, Execution, and Errors
+-- Functions: loadstring and loadfile
+CountLoad = 0
+local myFuncString = loadstring("CountLoad = CountLoad + 10") -- Acesso somente as variaveis globais
+for icount = 1, 6, 2 do
+	myFuncString()                                            -- Compilação e Execução
+end
+print("Compilation, Execution, and Error => Somatório:", CountLoad)
+
+-- The require Function
+-- Carga baseada no diretório ou no arquivo direto
+local reqOne = require("./?")
+--print(_LOADED)
+
 --[[
 Onde parei...
-https://www.lua.org/pil/7.html
+https://www.lua.org/pil/8.html
 ]]
