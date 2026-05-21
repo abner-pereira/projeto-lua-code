@@ -1,8 +1,8 @@
 --[[
-	Comentário de Bloco
+	Block Comments (Bloco de Comentários)
 	print("Olá Lua!")
 ]]
--- Comentário de Linha
+-- Line Comments (Linha de Comentários)
 
 -- Global Variables
 Nome = "Júlio"
@@ -374,20 +374,57 @@ for idx, value in iterFuncAFactory({ "A", "B", "C" }) do
 end
 
 -- Compilation, Execution, and Errors
--- Functions: loadstring and loadfile
+-- Functions: LOADSTRING and LOADFILE
 CountLoad = 0
 local myFuncString = loadstring("CountLoad = CountLoad + 10") -- Acesso somente as variaveis globais
+
 for icount = 1, 6, 2 do
-	myFuncString()                                            -- Compilação e Execução
+	myFuncString() -- Compilação e Execução
 end
-print("Compilation, Execution, and Error => Somatório:", CountLoad)
+print("Compilation, Execution, and Error (Load's) => Somatório:", CountLoad)
 
 -- The require Function
--- Carga baseada no diretório ou no arquivo direto
-local reqOne = require("./?")
---print(_LOADED)
+-- Carga baseada no diretório e/ou no arquivo (?;?.lua)
+local reqOne = require("files/one") -- Internamente -> files/one;files/one.lua
+print("Compilation, Execution, and Error (Require) => Msg:", reqOne.MyFunctionOne())
+
+-- Errors
+-- Error and Assert
+if true == false then -- Somente para NÃO interromper a execução
+	local getErro = false
+
+	if getErro == true then
+		-- Lançamento direto
+		error("Compilation, Execution, and Error (Error) => Msg: Lançamento de Erro")
+	else
+		-- Verifica antes de lançar
+		local msgAssert = "Compilation, Execution, and Error (Assert) => Msg: " ..
+			"Lançamento de Erro Verificado"
+		local resAssert = assert(1 == 2, msgAssert)
+	end
+end
+
+-- Error Handling and Exceptions
+-- Functions: ERROR and PCALL (protected call)
+local pcallCheck = function(...)
+	local nrParam = { ... }
+	local nrSum = 0
+	for idx, value in ipairs(nrParam) do
+		nrSum = nrSum + tonumber(value) -- Lançamento interno do erro
+	end
+	return nrSum
+end
+
+local myFuncPcall = function()
+	pcallCheck({ 10, 20, "C" })
+end
+
+local sttsPcall, msgPcall = pcall(myFuncPcall) -- Recepção do erro SEM interrupção do programa
+if not sttsPcall then
+	print("Compilation, Execution, and Error (PCall) => Msg:", msgPcall)
+end
 
 --[[
-Onde parei...
-https://www.lua.org/pil/8.html
+Onde parei..
+https://www.lua.org/pil/9.html
 ]]
