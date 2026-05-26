@@ -424,7 +424,43 @@ if not sttsPcall then
 	print("Compilation, Execution, and Error (PCall) => Msg:", msgPcall)
 end
 
+-- Coroutine
+-- Coroutine Basics
+local coroutineOne = coroutine.create(function()
+	print("Coroutine (Basic) => Msg: Task One")
+end)
+
+print("Coroutine (Basic) => Execution:", coroutine.resume(coroutineOne))
+print("Coroutine (Basic) => Status:", coroutine.status(coroutineOne))
+
+-- Coroutine with Field YIELD
+-- Controle de execução
+local coroutineTwo = coroutine.create(function()
+	local myTasks = { "Task One", "Task Two" }
+	for index, value in ipairs(myTasks) do
+		print("Coroutine (Basic Two) => Msg:", value)
+		coroutine.yield() -- Suspende a execução até a próxima chamada
+	end
+end)
+
+for coroIdx = 1, 3 do
+	print("Coroutine (Basic Two) => Execution:", coroutine.resume(coroutineTwo))
+	print("Coroutine (Basic Two) => Status:", coroutine.status(coroutineTwo))
+end
+
+-- Coroutine with Field YIELD (and parameters)
+local coroutineThree = coroutine.create(function(myId)
+	print("Coroutine (Basic Three) => MsgId:", myId)
+	local resId = coroutine.yield() -- Suspende a execução até a próxima chamada		
+	print("Coroutine (Basic Three) => MsgId-Pos-Break:", resId)
+end)
+
+for coroId = 1, 3 do
+	print("Coroutine (Basic Three) => Execution:", coroutine.resume(coroutineThree, coroId))
+	print("Coroutine (Basic Three) => Status:", coroutine.status(coroutineThree))
+end
+
 --[[
 Onde parei..
-https://www.lua.org/pil/9.html
+https://www.lua.org/pil/9.2.html
 ]]
