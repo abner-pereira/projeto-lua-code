@@ -426,12 +426,13 @@ end
 
 -- Coroutine
 -- Coroutine Basics
+-- States: Suspended, Running and Dead
 local coroutineOne = coroutine.create(function()
 	print("Coroutine (Basic) => Msg: Task One")
 end)
 
-print("Coroutine (Basic) => Execution:", coroutine.resume(coroutineOne))
-print("Coroutine (Basic) => Status:", coroutine.status(coroutineOne))
+print("Coroutine (Basic) => Execution:", coroutine.resume(coroutineOne)) -- Inicializa a corotina
+print("Coroutine (Basic) => Status:", coroutine.status(coroutineOne))    -- Verifica o status
 
 -- Coroutine with Field YIELD
 -- Controle de execução
@@ -439,7 +440,7 @@ local coroutineTwo = coroutine.create(function()
 	local myTasks = { "Task One", "Task Two" }
 	for index, value in ipairs(myTasks) do
 		print("Coroutine (Basic Two) => Msg:", value)
-		coroutine.yield() -- Suspende a execução até a próxima chamada
+		coroutine.yield() -- Suspende a execução temporariamente
 	end
 end)
 
@@ -451,7 +452,7 @@ end
 -- Coroutine with Field YIELD (and parameters)
 local coroutineThree = coroutine.create(function(myId)
 	print("Coroutine (Basic Three) => MsgId:", myId)
-	local resId = coroutine.yield() -- Suspende a execução até a próxima chamada		
+	local resId = coroutine.yield() -- Suspende a execução temporariamente		
 	print("Coroutine (Basic Three) => MsgId-Pos-Break:", resId)
 end)
 
@@ -460,7 +461,45 @@ for coroId = 1, 3 do
 	print("Coroutine (Basic Three) => Status:", coroutine.status(coroutineThree))
 end
 
+-- Pipes and Filters
+local sendLine = function(param)
+	coroutine.yield(param) -- Suspende a execução temporariamente
+	print("Coroutine (Pipes and Filters) =>", param)
+end
+
+local coRead = function(paramFile)
+	return coroutine.create(function()
+		for idx, vl in ipairs(paramFile) do
+			sendLine("Read: " .. tostring(vl))
+		end
+	end)
+end
+
+local coWrite = function(paramFile)
+	return coroutine.create(function()
+		for idx, vl in ipairs(paramFile) do
+			sendLine("Write: " .. tostring(vl))
+		end
+	end)
+end
+
+local coMaster = function(paramRead, paramWrite)
+	return coroutine.create(function()
+		local status = true
+		while status do
+			status = coroutine.resume(paramRead) -- Inicializa a corotina
+			status = coroutine.resume(paramWrite) -- Inicializa a corotina
+		end
+	end)
+end
+
+local arrayCoValues = { 10, 20, 30 }
+local tRead = coRead(arrayCoValues)
+local tWrite = coWrite(arrayCoValues)
+local tMaster = coMaster(tRead, tWrite)
+coroutine.resume(tMaster) -- Inicializa a corotina
+
 --[[
 Onde parei..
-https://www.lua.org/pil/9.2.html
+https://www.lua.org/pil/9.3.html
 ]]
