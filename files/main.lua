@@ -462,15 +462,18 @@ for coroId = 1, 3 do
 end
 
 -- Pipes and Filters
-local sendLine = function(param)
+local sendLineCo = function(param)
 	coroutine.yield(param) -- Suspende a execução temporariamente
+end
+
+local showLineCo = function(param)
 	print("Coroutine (Pipes and Filters) =>", param)
 end
 
 local coRead = function(paramFile)
 	return coroutine.create(function()
 		for idx, vl in ipairs(paramFile) do
-			sendLine("Read: " .. tostring(vl))
+			sendLineCo("Read: " .. tostring(vl))
 		end
 	end)
 end
@@ -478,18 +481,29 @@ end
 local coWrite = function(paramFile)
 	return coroutine.create(function()
 		for idx, vl in ipairs(paramFile) do
-			sendLine("Write: " .. tostring(vl))
+			sendLineCo("Write: " .. tostring(vl))
 		end
 	end)
 end
 
 local coMaster = function(paramRead, paramWrite)
 	return coroutine.create(function()
-		local status = true
-		while status do
-			status = coroutine.resume(paramRead) -- Inicializa a corotina
-			status = coroutine.resume(paramWrite) -- Inicializa a corotina
-		end
+		local successRes = nil
+		local yieldRes = nil
+		local statusRes = nil
+		repeat
+			successRes, yieldRes = coroutine.resume(paramRead) -- Inicializa a corotina
+			statusRes = coroutine.status(paramRead)
+			if statusRes ~= "dead" then
+				showLineCo(yieldRes)
+			end
+
+			successRes, yieldRes = coroutine.resume(paramWrite) -- Inicializa a corotina
+			statusRes = coroutine.status(paramWrite)
+			if statusRes ~= "dead" then
+				showLineCo(yieldRes)
+			end
+		until successRes == false
 	end)
 end
 
@@ -499,7 +513,49 @@ local tWrite = coWrite(arrayCoValues)
 local tMaster = coMaster(tRead, tWrite)
 coroutine.resume(tMaster) -- Inicializa a corotina
 
+-- Coroutines as Iterators
+local coIterator = function(paramList)
+	local pos = 0
+	local coIter = coroutine.create(function()
+		repeat
+			pos = pos + 1
+			if paramList[pos] == nil then
+				coroutine.yield()        -- Suspende a execução temporariamente
+			else
+				coroutine.yield(pos, paramList[pos]) -- Suspende a execução temporariamente
+			end
+		until false
+	end)
+	return function()
+		local success, resParam1, resParam2 = coroutine.resume(coIter) -- Inicializa a corotina
+		return resParam1, resParam2
+	end
+end
+
+local arrayCoIterator = { "AA", "AB" }
+for idx, value in coIterator(arrayCoIterator) do
+	print("Coroutine (as Iterators) => Pos.:", idx, "| Valor:", value)
+end
+
+-- Coroutine.Wrap
+-- Retorna a Função -> Function (Diferente do Create -> Thread)
+-- NÂO possui Controle de Status
+local coFuncWrap = coroutine.wrap(function(paramNum, paramTot)
+	local sumNum = 0
+	for idx, vl in ipairs(paramNum) do
+		sumNum = sumNum + vl
+		print("Coroutine (Wrap) => Total de Chamadas:", idx, "de", paramTot)
+		coroutine.yield() -- Suspende a execução temporariamente
+	end
+	print("Total:", sumNum)
+end)
+
+local arrayCoIterWrap = { 50, 60, 75 }
+local totCoIterWrap = 3
+coFuncWrap(arrayCoIterWrap, totCoIterWrap) -- Inicializa a corotina
+coFuncWrap()                               -- Continuação da execução
+
 --[[
 Onde parei..
-https://www.lua.org/pil/9.3.html
+https://www.lua.org/pil/9.4.html
 ]]
