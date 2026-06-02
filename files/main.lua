@@ -557,5 +557,5 @@ coFuncWrap()                               -- Continuação da execução
 
 --[[
 Onde parei..
-https://www.lua.org/pil/9.4.html
+https://www.lua.org/pil/11.html
 ]]
