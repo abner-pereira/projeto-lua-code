@@ -555,7 +555,63 @@ local totCoIterWrap = 3
 coFuncWrap(arrayCoIterWrap, totCoIterWrap) -- Inicializa a corotina
 coFuncWrap()                               -- Continuação da execução
 
+-- Data Structures
+-- Matrices and Multi-Dimensional Arrays
+local aMult = {}
+
+for idxLine = 1, 3 do -- Linhas
+	aMult[idxLine] = {}
+	for idxCol = 1, 2 do -- Colunas	
+		aMult[idxLine][idxCol] = idxLine * idxCol
+	end
+end
+
+-- aMult = {{1,2},{2,4},{3,6}}
+print("Data Structures (Multi-Dimensional Arrays) => Valor (Linha 3 - Coluna 2):", aMult[3][2])
+
+-- Linked Lists
+-- Ex.: Lista com Algoritmo de Pilha "Stack" - LIFO (Last In, First Out)
+local aList = nil
+local aListCount = 0
+
+repeat
+	aListCount = aListCount + 1
+
+	local intList = {}
+	intList.previous = aList
+	intList.value = aListCount * 100
+	aList = intList
+until aListCount == 3
+
+while aList do
+	print("Data Structures (Linked Lists) => Item:", aList.value)
+	aList = aList.previous
+end
+
+-- Queues and Double Queues
+local aQueues = {}
+
+function aQueues.new()
+	return { length = 0 }
+end
+
+function aQueues.push(list, value)
+	list.length = list.length + 1
+	list[list.length] = value
+end
+
+function aQueues.list(list)
+	for idx, vl in ipairs(list) do
+		print("Data Structures (Queues and Double Queues) => Cód. Produto:", vl)
+	end
+end
+
+local aListQueues = aQueues.new()
+aQueues.push(aListQueues, "A-3CE") -- Passagem por Referência
+aQueues.push(aListQueues, "A-4CD") -- Passagem por Referência
+aQueues.list(aListQueues)
+
 --[[
 Onde parei..
-https://www.lua.org/pil/11.html
+https://www.lua.org/pil/11.5.html
 ]]
