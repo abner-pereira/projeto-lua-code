@@ -409,7 +409,7 @@ end
 local pcallCheck = function(...)
 	local nrParam = { ... }
 	local nrSum = 0
-	for idx, value in ipairs(nrParam) do
+	for _, value in ipairs(nrParam) do
 		nrSum = nrSum + tonumber(value) -- Lançamento interno do erro
 	end
 	return nrSum
@@ -438,7 +438,7 @@ print("Coroutine (Basic) => Status:", coroutine.status(coroutineOne))    -- Veri
 -- Controle de execução
 local coroutineTwo = coroutine.create(function()
 	local myTasks = { "Task One", "Task Two" }
-	for index, value in ipairs(myTasks) do
+	for _, value in ipairs(myTasks) do
 		print("Coroutine (Basic Two) => Msg:", value)
 		coroutine.yield() -- Suspende a execução temporariamente
 	end
@@ -472,7 +472,7 @@ end
 
 local coRead = function(paramFile)
 	return coroutine.create(function()
-		for idx, vl in ipairs(paramFile) do
+		for _, vl in ipairs(paramFile) do
 			sendLineCo("Read: " .. tostring(vl))
 		end
 	end)
@@ -480,7 +480,7 @@ end
 
 local coWrite = function(paramFile)
 	return coroutine.create(function()
-		for idx, vl in ipairs(paramFile) do
+		for _, vl in ipairs(paramFile) do
 			sendLineCo("Write: " .. tostring(vl))
 		end
 	end)
@@ -527,7 +527,7 @@ local coIterator = function(paramList)
 		until false
 	end)
 	return function()
-		local success, resParam1, resParam2 = coroutine.resume(coIter) -- Inicializa a corotina
+		local _, resParam1, resParam2 = coroutine.resume(coIter) -- Inicializa a corotina
 		return resParam1, resParam2
 	end
 end
@@ -601,7 +601,7 @@ function aQueues.push(list, value)
 end
 
 function aQueues.list(list)
-	for idx, vl in ipairs(list) do
+	for _, vl in ipairs(list) do
 		print("Data Structures (Queues and Double Queues) => Cód. Produto:", vl)
 	end
 end
@@ -611,7 +611,56 @@ aQueues.push(aListQueues, "A-3CE") -- Passagem por Referência
 aQueues.push(aListQueues, "A-4CD") -- Passagem por Referência
 aQueues.list(aListQueues)
 
+-- String Buffers
+-- Biblioteca Table -> Manipulação de Array
+-- Operador (#)     -> Total de Elementos no Array
+local strBuffersOrigin = {
+	"A",
+	"B",
+	"C",
+	"D",
+	"E",
+	"F"
+}
+local strBuffersCopy = {}
+
+-- Inversão
+local strBuffers = {}
+strBuffers.revert = function(paramArray)
+	for idx = 1, #paramArray, 1 do        -- (#) -> Total de Elementos no Array
+		local linePos = (#paramArray + 1) - idx -- (#) -> Total de Elementos no Array
+
+		if linePos <= idx then break end
+
+		local tmpLine = paramArray[linePos]
+		paramArray[linePos] = paramArray[idx]
+		paramArray[idx] = tmpLine
+	end
+end
+
+-- Movimentação
+strBuffers.move = function(arraySource, arrayTarget)
+	for idx = #arraySource, 1, -1 do -- (#) -> Total de Elementos no Array
+		-- Remoção
+		local lineArraySource = table.remove(arraySource, idx)
+
+		-- Inserção
+		table.insert(arrayTarget, lineArraySource)
+	end
+end
+
+-- Exibição
+strBuffers.show = function(paramArray)
+	print("Data Structures (String Buffers) =>",
+		string.format("Tot.Reg.: %d | Final: %s", #paramArray, table.concat(paramArray)))
+end
+
+strBuffers.revert(strBuffersOrigin)
+strBuffers.move(strBuffersOrigin, strBuffersCopy)
+strBuffers.show(strBuffersOrigin)
+strBuffers.show(strBuffersCopy)
+
 --[[
 Onde parei..
-https://www.lua.org/pil/11.5.html
+https://www.lua.org/pil/12.html
 ]]
