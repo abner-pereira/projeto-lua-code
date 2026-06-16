@@ -1,0 +1,12 @@
+-- Estrutura de Dados no Formato LUA
+Person{
+	firstName = "Maria",
+	lastName = "Palmeira",
+	birthDay = 19880503
+}
+
+Person{
+	firstName = "Carlos",
+	lastName = "Sampaio",
+	birthDay = 19860227
+}

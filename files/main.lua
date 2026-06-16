@@ -660,7 +660,31 @@ strBuffers.move(strBuffersOrigin, strBuffersCopy)
 strBuffers.show(strBuffersOrigin)
 strBuffers.show(strBuffersCopy)
 
+-- Data Files and Persistence
+local people = {}       -- Recepção das linhas
+function Person(person) -- Função recursiva de mesmo nome na estrutura do arquivo
+	if person.firstName then
+		table.insert(people, person)
+		print("Data Files and Persistence (Reading) => Total Inserido: " .. #people)
+	end
+end
+
+-- Leitura do arquivo
+dofile("files/data.csv")
+for _, value in pairs(people) do
+	print("Data Files and Persistence (Showing) => Nome Completo:", value.firstName, value.lastName)
+end
+
+-- Metatables and Metamethods
+-- Metodos: setmetatable and getmetatable
+local myMeta = {}
+print("Metatables and Metamethods (Get and Set) => Metatable:", getmetatable(myMeta))
+
+local firstMeta = {}
+setmetatable(firstMeta, myMeta)
+print("Metatables and Metamethods (Get and Set) => Metatable:", getmetatable(firstMeta))
+
 --[[
 Onde parei..
-https://www.lua.org/pil/12.html
+https://www.lua.org/pil/13.html
 ]]
