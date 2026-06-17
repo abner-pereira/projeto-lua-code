@@ -676,7 +676,7 @@ for _, value in pairs(people) do
 end
 
 -- Metatables and Metamethods
--- Metodos: setmetatable and getmetatable
+-- Methods: SETMETATABLE and GETMETATABLE
 local myMeta = {}
 print("Metatables and Metamethods (Get and Set) => Metatable:", getmetatable(myMeta))
 
@@ -684,7 +684,68 @@ local firstMeta = {}
 setmetatable(firstMeta, myMeta)
 print("Metatables and Metamethods (Get and Set) => Metatable:", getmetatable(firstMeta))
 
+-- Arithmetic Metamethods
+local metaNumbers = {}
+
+function metaNumbers.factory(param)
+	local metaNum = {}
+	for idx, value in ipairs(param) do
+		metaNum[idx] = value
+	end
+	setmetatable(metaNum, metaNumbers)
+	print("Metatables and Metamethods (Arithmetic) => Source", metaNum, "| Link", getmetatable(metaNum))
+	return metaNum
+end
+
+-- Configuração do comportamento nas operações
+-- __add (for add)
+-- __mul (for multiply)
+-- __sub (for subtraction)
+-- __div (for division)
+-- __unm (for negation)
+-- __pow (for exponentiation)
+-- __concat (for concatenation)
+function metaNumbers.__add(paramOne, paramTwo)
+	local res = {}
+
+	if getmetatable(paramOne) == metaNumbers then -- Validação do Metatable
+		for _, value in ipairs(paramOne) do
+			table.insert(res, value)
+		end
+	end
+
+	if getmetatable(paramTwo) == metaNumbers then -- Validação do Metatable
+		for _, value in ipairs(paramTwo) do
+			table.insert(res, value)
+		end
+	end
+
+	table.sort(res, function(v1, v2)
+		if v1 < v2 then
+			return true
+		else
+			return false
+		end
+	end)
+	return res
+end
+
+function metaNumbers.show(param)
+	local res = table.concat(param, ",");
+	res = "{" .. res .. "}"
+	print("Metatables and Metamethods (Arithmetic) => Reg.:", res)
+end
+
+local metaPar = metaNumbers.factory({ 0, 2, 4, 6, 8 })
+local metaImpar = metaNumbers.factory({ 1, 3, 5, 7, 9 })
+local metaResOne = metaPar + metaImpar
+metaNumbers.show(metaResOne)
+
+local metaNoMeta = { 11, 12, 13 }
+local metaResTwo = metaPar + metaNoMeta
+metaNumbers.show(metaResTwo)
+
 --[[
 Onde parei..
-https://www.lua.org/pil/13.html
+https://www.lua.org/pil/13.2.html
 ]]
