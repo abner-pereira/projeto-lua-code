@@ -745,7 +745,45 @@ local metaNoMeta = { 11, 12, 13 }
 local metaResTwo = metaPar + metaNoMeta
 metaNumbers.show(metaResTwo)
 
+-- Relational Metamethods
+-- Configuração do comportamento nas operações
+-- __eq (equality)
+-- __lt (less than)
+-- __le (less or equal)
+function metaNumbers.__eq(paramOne, paramTwo)
+	if not (#paramOne == #paramTwo) then
+		return false
+	end
+	for idx, vl in pairs(paramOne) do
+		if not (vl == paramTwo[idx]) then
+			return false
+		end
+	end
+	return true
+end
+
+local metaCompOne = metaNumbers.factory({ 1, 3, 5, 7, 11 });
+local metaCompTwo = metaNumbers.factory({ 1, 3, 5, 7, 11 });
+local metaCompThree = { 1, 3, 5, 7, 11 };
+
+-- A metamethod only is selected when both objects being compared have the same type and
+-- the same metamethod for the selected operation.
+print("Metatables and Metamethods (Relational) => Compare One vs Two:", metaCompOne == metaCompTwo)
+print("Metatables and Metamethods (Relational) => Compare Two vs Three:", metaCompTwo == metaCompThree)
+
+-- Table-Access Metamethods
+-- The __index Metamethod
+metaNumbers.prototype = { isDecimals = true, isLengthFixe = false } -- Criando valores padrão
+
+function metaNumbers.__index(paramTable, paramKey)
+	return paramKey .. ": " .. tostring(metaNumbers.prototype[paramKey])
+end
+
+local metaTableOne = metaNumbers.factory({ 10, 20, 30 })
+print("Metatables and Metamethods (Table-Access) => Get. Default: {",
+	metaTableOne.isDecimals, "|", metaTableOne.isLengthFixe, "}")
+
 --[[
 Onde parei..
-https://www.lua.org/pil/13.2.html
+https://www.lua.org/pil/13.4.2.html
 ]]
