@@ -773,7 +773,7 @@ print("Metatables and Metamethods (Relational) => Compare Two vs Three:", metaCo
 
 -- Table-Access Metamethods
 -- The __index Metamethod
-metaNumbers.prototype = { isDecimals = true, isLengthFixe = false } -- Criando valores padrão
+metaNumbers.prototype = { isDecimals = true, isLengthFixe = false }
 
 function metaNumbers.__index(paramTable, paramKey)
 	return paramKey .. ": " .. tostring(metaNumbers.prototype[paramKey])
@@ -781,9 +781,50 @@ end
 
 local metaTableOne = metaNumbers.factory({ 10, 20, 30 })
 print("Metatables and Metamethods (Table-Access) => Get. Default: {",
-	metaTableOne.isDecimals, "|", metaTableOne.isLengthFixe, "}")
+	metaTableOne.isDecimals, "}")
+
+print("Metatables and Metamethods (Table-Access) => Get. Default: {",
+	metaTableOne.isLengthFixe, "}")
+
+-- The __newindex Metamethod
+local metaTableTwo = {}
+function metaNumbers.__newindex(paramTable, paramKey, paramValue)
+	table.insert(metaTableTwo, paramValue)
+end
+
+metaTableOne[#metaTableOne + 1] = 40
+metaTableOne[#metaTableOne + 1] = 50
+
+for idx, value in ipairs(metaTableTwo) do
+	print("Metatables and Metamethods (Table-Access) => Insert: { index[" .. tostring(idx) .. "]:",
+		value, "}")
+end
+
+-- Tables with Default Values
+local metaTableDef = {}
+function metaTableDef.factory(paramTable)
+	return setmetatable(paramTable, metaTableDef)
+end
+
+function metaTableDef.setDefault(paramDef)
+	metaTableDef.__def = paramDef
+end
+
+function metaTableDef.__index(paramTable, paramKey)
+	return metaTableDef.__def
+end
+
+metaTableDef.setDefault("Z")
+local metaTableNullOne = metaTableDef.factory({ "A", nil, "C" })
+local metaTableNullConc = {}
+for idx = 1, 5, 1 do
+	metaTableNullConc[idx] = metaTableNullOne[idx]
+end
+
+print("Metatables and Metamethods (Table-Access) => Default (nil): {" ..
+	table.concat(metaTableNullConc, ",") .. "}")
 
 --[[
 Onde parei..
-https://www.lua.org/pil/13.4.2.html
+https://www.lua.org/pil/13.4.4.html
 ]]
