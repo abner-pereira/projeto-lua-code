@@ -824,7 +824,46 @@ end
 print("Metatables and Metamethods (Table-Access) => Default (nil): {" ..
 	table.concat(metaTableNullConc, ",") .. "}")
 
+-- Tracking Table Accesses and Read-Only Table (Proxy)
+local metaTableProxyModel = {}
+
+local metaTableProxy = {
+	__index = function(paramTable, paramKey)
+		return paramTable[metaTableProxyModel][paramKey]
+	end,
+
+	__newindex = function(paramTable, paramKey, paramValue)
+		-- Verifica se é editável
+		if paramTable._edit then
+			paramTable[metaTableProxyModel][paramKey] = paramValue
+		else
+			error("Tabela em modo de leitura (gravação NÃO permitida).", 2)
+		end
+	end
+}
+
+local getTableProxy = function(paramEdit)
+	-- Retorno do proxy
+	local tableProxy = {}
+	tableProxy._edit = paramEdit
+	tableProxy[metaTableProxyModel] = {}
+	return setmetatable(tableProxy, metaTableProxy)
+end
+
+local metaTableEdit = true
+local metaTableProxyOne = getTableProxy(metaTableEdit)
+local metaTableProxyTwo = getTableProxy(metaTableEdit)
+
+metaTableProxyOne[3] = "Manaus"
+metaTableProxyTwo[3] = "Recife"
+
+print("Metatables and Metamethods (Table-Access) => Proxying: Key:",
+	3, "| Reg.:", metaTableProxyOne[3])
+
+print("Metatables and Metamethods (Table-Access) => Proxying: Key:",
+	3, "| Reg.:", metaTableProxyTwo[3])
+
 --[[
 Onde parei..
-https://www.lua.org/pil/13.4.4.html
+https://www.lua.org/pil/14.html
 ]]
