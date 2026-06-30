@@ -863,7 +863,31 @@ print("Metatables and Metamethods (Table-Access) => Proxying: Key:",
 print("Metatables and Metamethods (Table-Access) => Proxying: Key:",
 	3, "| Reg.:", metaTableProxyTwo[3])
 
+-- The Environment
+-- Accessing Global Variables with Dynamic Names (_G)
+Employer = {}
+Employer.Name = "Juan"
+Employer.Position = "Manager"
+
+local glNamesEmp = ""
+for key, value in pairs(_G) do
+	if key == "Employer" then
+		for keyEmp, valueEmp in pairs(value) do
+			glNamesEmp = keyEmp .. ": " .. valueEmp
+			print("The Environment (Global Variables with Dynamic Names) => Employer (Manual):", glNamesEmp)
+		end
+	end
+end
+
+-- Declaring Global Variables
+-- RAWSET and RAWGET (Set and get _G, without invoking any metamethod)
+rawset(Employer, "Salary", 15470.95)
+
+-- Similar: _G["Employer"]["Salary"]
+print("The Environment (Declaring Global Variables) => Employer (Function): Salary:",
+	rawget(Employer, "Salary"))
+
 --[[
 Onde parei..
-https://www.lua.org/pil/14.html
+https://www.lua.org/pil/15.html
 ]]
