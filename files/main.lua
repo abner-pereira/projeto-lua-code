@@ -887,7 +887,74 @@ rawset(Employer, "Salary", 15470.95)
 print("The Environment (Declaring Global Variables) => Employer (Function): Salary:",
 	rawget(Employer, "Salary"))
 
+-- Packages
+-- The Basic Approach
+local g = {}
+PkgGame = g
+
+function g.add(teamOne, teamTwo)
+	g.teamOne = {}
+	g.teamTwo = {}
+	g.teamOne.name = teamOne
+	g.teamTwo.name = teamTwo
+end
+
+function g.start()
+	g.teamOne.score = math.random(0, 10)
+	g.teamTwo.score = math.random(0, 10)
+end
+
+function g.show()
+	local msg = string.format('%s (%d) vs %s (%d)',
+		g.teamOne.name, g.teamOne.score,
+		g.teamTwo.name, g.teamTwo.score)
+	print("Packages (The Basic Approach) => Final Game:", msg)
+end
+
+PkgGame.add("Palmeiras", "América")
+PkgGame.start()
+PkgGame.show()
+
+-- Privacy (Reescrita do código acima)
+local g2 = {}
+PkgGameTwo = nil
+
+local addTeam = function(teamOne, teamTwo)
+	g2.teamOne = {}
+	g2.teamTwo = {}
+	g2.teamOne.name = teamOne
+	g2.teamTwo.name = teamTwo
+end
+
+local startGame = function()
+	g2.teamOne.score = math.random(0, 10)
+	g2.teamTwo.score = math.random(0, 10)
+end
+
+local showResults = function()
+	local msg = string.format('%s (%d) vs %s (%d)',
+		g2.teamOne.name, g2.teamOne.score,
+		g2.teamTwo.name, g2.teamTwo.score)
+	print("Packages (Privacy) => Semifinal Game:", msg)
+end
+
+PkgGameTwo = {
+	add = addTeam,
+	start = startGame,
+	show = showResults
+}
+
+PkgGameTwo.add("Coritiba", "Avaí")
+PkgGameTwo.start()
+PkgGameTwo.show()
+
+-- Packages and Files (require)
+local exPkgGame = require("files/game")
+exPkgGame.add("Remo", "Bragantino", "Mirassol")
+exPkgGame.start()
+exPkgGame.show()
+
 --[[
 Onde parei..
-https://www.lua.org/pil/15.html
+https://www.lua.org/pil/15.4.html
 ]]
