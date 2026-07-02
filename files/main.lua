@@ -385,7 +385,7 @@ print("Compilation, Execution, and Error (Load's) => Somatório:", CountLoad)
 
 -- The require Function
 -- Carga baseada no diretório e/ou no arquivo (?;?.lua)
-local reqOne = require("files/one") -- Internamente -> files/one;files/one.lua
+local reqOne = require("files/one") -- Separador (/) ou (.) -> Internamente: files/one;files/one.lua
 print("Compilation, Execution, and Error (Require) => Msg:", reqOne.MyFunctionOne())
 
 -- Errors
@@ -949,12 +949,12 @@ PkgGameTwo.start()
 PkgGameTwo.show()
 
 -- Packages and Files (require)
-local exPkgGame = require("files/game")
+local exPkgGame = require("files.game") -- Separador (/) ou (.) -> Internamente: files/game;files/game.lua
 exPkgGame.add("Remo", "Bragantino", "Mirassol")
 exPkgGame.start()
 exPkgGame.show()
 
 --[[
 Onde parei..
-https://www.lua.org/pil/15.4.html
+https://www.lua.org/pil/16.html
 ]]
