@@ -954,7 +954,29 @@ exPkgGame.add("Remo", "Bragantino", "Mirassol")
 exPkgGame.start()
 exPkgGame.show()
 
+-- Object-Oriented Programming
+-- Método/função com (:) -> Passa o objeto de origem (self) de forma oculta,
+-- ou seja, vísivel somente dentro do método/função.
+Home = {
+	bedrooms = 0,
+	setBedrooms = function(self, numRooms) -- Explícito (self)
+		self.bedrooms = numRooms
+	end
+}
+
+function Home:getBedrooms() -- Implicito (self)
+	return "Bedrooms: " .. self.bedrooms
+end
+
+local townHouse = Home
+townHouse:setBedrooms(3)
+print("OOP in Lua (Method) =>", townHouse:getBedrooms())
+
+local countryHouse = Home
+countryHouse:setBedrooms(4)
+print("OOP in Lua (Method) =>", countryHouse:getBedrooms())
+
 --[[
 Onde parei..
-https://www.lua.org/pil/16.html
+https://www.lua.org/pil/16.1.html
 ]]
