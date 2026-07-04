@@ -976,7 +976,31 @@ local countryHouse = Home
 countryHouse:setBedrooms(4)
 print("OOP in Lua (Method) =>", countryHouse:getBedrooms())
 
+-- Classes
+Driver = {
+	idLicenca = "",
+	getIdLicenca = function(self)
+		return self.idLicenca
+	end,
+	setIdLicenca = function(self, idLicenca)
+		self.idLicenca = "A" .. idLicenca
+	end,
+	new = function(self)
+		self.__index = self     -- Link para si mesmo
+		return setmetatable({}, self) -- Novo objeto com link ao Driver
+	end
+}
+
+local oMotorBoy = Driver:new()
+oMotorBoy:setIdLicenca(9876)
+
+local oBusDriver = Driver:new()
+oBusDriver:setIdLicenca(1234)
+
+print("OOP in Lua (Classes) => ID Licença:", oMotorBoy:getIdLicenca())
+print("OOP in Lua (Classes) => ID Licença:", oBusDriver:getIdLicenca())
+
 --[[
 Onde parei..
-https://www.lua.org/pil/16.1.html
+https://www.lua.org/pil/16.2.html
 ]]
