@@ -1000,7 +1000,43 @@ oBusDriver:setIdLicenca(1234)
 print("OOP in Lua (Classes) => ID Licença:", oMotorBoy:getIdLicenca())
 print("OOP in Lua (Classes) => ID Licença:", oBusDriver:getIdLicenca())
 
+-- Inheritance
+-- Main Class
+Vehicle = {
+	idVehicle = nil
+}
+
+function Vehicle:new(paramRef)
+	local ref = paramRef or {}
+	self.idVehicle = "VH" .. math.random(100, 200)
+	self.__index = self
+	return setmetatable(ref, self)
+end
+
+function Vehicle:getId()
+	return self.idVehicle
+end
+
+-- Inherited Class
+Car = Vehicle:new()
+
+function Car:getSeats()
+	return self.seats
+end
+
+function Car.factory(seats)
+	return Car:new({ seats = seats or 5 })
+end
+
+local oCar = Car.factory()
+print("OOP in Lua (Inheritance) => ID Car (Main):", oCar:getId())
+print("OOP in Lua (Inheritance) => Seats Car (Inherited):", oCar:getSeats())
+
+local oCar2 = Car.factory(6)
+print("OOP in Lua (Inheritance) => ID Car (Main):", oCar2:getId())
+print("OOP in Lua (Inheritance) => Seats Car (Inherited):", oCar2:getSeats())
+
 --[[
 Onde parei..
-https://www.lua.org/pil/16.2.html
+https://www.lua.org/pil/16.3.html
 ]]
