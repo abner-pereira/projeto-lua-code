@@ -987,7 +987,7 @@ Driver = {
 	end,
 	new = function(self)
 		self.__index = self     -- Link para si mesmo
-		return setmetatable({}, self) -- Novo objeto com link ao Driver
+		return setmetatable({}, self) -- Novo objeto com link para si mesmo
 	end
 }
 
@@ -1009,8 +1009,8 @@ Vehicle = {
 function Vehicle:new(paramRef)
 	local ref = paramRef or {}
 	self.idVehicle = "VH" .. math.random(100, 200)
-	self.__index = self
-	return setmetatable(ref, self)
+	self.__index = self         -- Link para si mesmo
+	return setmetatable(ref, self) -- Novo objeto com link para si mesmo
 end
 
 function Vehicle:getId()
@@ -1025,7 +1025,8 @@ function Car:getSeats()
 end
 
 function Car.factory(seats)
-	return Car:new({ seats = seats or 5 })
+	local refCar = { seats = seats or 5 }
+	return Car:new(refCar)
 end
 
 local oCar = Car.factory()
@@ -1036,7 +1037,63 @@ local oCar2 = Car.factory(6)
 print("OOP in Lua (Inheritance) => ID Car (Main):", oCar2:getId())
 print("OOP in Lua (Inheritance) => Seats Car (Inherited):", oCar2:getSeats())
 
+-- Multiple Inheritance
+Person = {
+	setNome = function(self, paramNome)
+		self.nome = paramNome
+	end,
+	getNome = function(self)
+		return self.nome
+	end
+}
+
+Citizen = {
+	setIdRG = function(self, paramIdRG)
+		self.idRG = paramIdRG
+	end,
+	getIdRG = function(self)
+		return self.idRG
+	end
+}
+
+local getParentMethod = function(key)
+	local parents = { Person, Citizen }
+	for _, parentValue in ipairs(parents) do
+		if parentValue[key] then
+			return parentValue[key] -- Método da classe superior
+		end
+	end
+end
+
+Doctor = {} -- Person and Citizen
+
+function Doctor.factory()
+	local refDoctor = {
+		setAtuacao = function(self, paramAtuacao)
+			self.atuacao = paramAtuacao
+		end,
+		getAtuacao = function(self)
+			return self.atuacao
+		end
+	}
+
+	local refSuper = {
+		__index = function(_, key)
+			return getParentMethod(key)
+		end
+	}
+
+	return setmetatable(refDoctor, refSuper) -- Link para a classe superior
+end
+
+local oDoctor = Doctor.factory()
+oDoctor:setNome("Gilvan Souza")
+oDoctor:setIdRG(1475)
+
+print("OOP in Lua (Multiple Inheritance) => Nome (Person):", oDoctor:getNome())
+print("OOP in Lua (Multiple Inheritance) => RG (Citizen):", oDoctor:getIdRG())
+
 --[[
 Onde parei..
-https://www.lua.org/pil/16.3.html
+https://www.lua.org/pil/16.4.html
 ]]
