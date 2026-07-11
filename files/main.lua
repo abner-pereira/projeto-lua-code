@@ -1093,7 +1093,42 @@ oDoctor:setIdRG(1475)
 print("OOP in Lua (Multiple Inheritance) => Nome (Person):", oDoctor:getNome())
 print("OOP in Lua (Multiple Inheritance) => RG (Citizen):", oDoctor:getIdRG())
 
+-- Privacy
+BankAccount = {}
+
+function BankAccount.factory(nome)
+	local hideFields = { nome = nome, saldo = 0 } -- Campos privados
+
+	local refAccount = {}
+	refAccount.__index = refAccount
+
+	function refAccount:addSaldo(paramValor)
+		hideFields.saldo = hideFields.saldo + paramValor
+	end
+
+	function refAccount:subSaldo(paramValor)
+		hideFields.saldo = hideFields.saldo - paramValor
+	end
+
+	function refAccount:getSaldo()
+		return "Correntista: " .. hideFields.nome .. " | Saldo: " .. hideFields.saldo
+	end
+
+	return setmetatable({}, refAccount) -- Link para si mesmo
+end
+
+local accountOne = BankAccount.factory("Janaina")
+accountOne:addSaldo(450)
+accountOne:addSaldo(365)
+
+local accountTwo = BankAccount.factory("Uiara")
+accountTwo:addSaldo(465)
+accountTwo:subSaldo(230)
+
+print("OOP in Lua (Privacy) =>", accountOne:getSaldo())
+print("OOP in Lua (Privacy) =>", accountTwo:getSaldo())
+
 --[[
 Onde parei..
-https://www.lua.org/pil/16.4.html
+https://www.lua.org/pil/17.html
 ]]
