@@ -1128,7 +1128,65 @@ accountTwo:subSaldo(230)
 print("OOP in Lua (Privacy) =>", accountOne:getSaldo())
 print("OOP in Lua (Privacy) =>", accountTwo:getSaldo())
 
+-- Weak Tables
+local weakOne = {}
+local weakTwo = {}
+weakTwo.__mode = "k" -- 'k' -> Key; 'v' -> Value; 'kv' -> Key/Value
+setmetatable(weakOne, weakTwo)
+
+local weakKey = {} -- SEMPRE um Objeto
+weakOne[weakKey] = 10
+
+weakKey = {} -- SEMPRE um Objeto
+weakOne[weakKey] = 20
+
+weakKey = {} -- SEMPRE um Objeto
+weakOne[weakKey] = 30
+
+local showWeak = function(param)
+	for _, value in pairs(weakOne) do
+		print("Weak Tables (Overview) =>", param, value)
+	end
+end
+
+showWeak("Antes do Garbage:")
+
+-- Execução forçada do "Garbage Collection"
+-- Registros sem referência ativa serão deletados
+collectgarbage()
+showWeak("Depois do Garbage:")
+
+-- Memoize Functions
+local weakResult = {}
+setmetatable(weakResult, { __mode = "v" }) -- 'k' -> Key; 'v' -> Value; 'kv' -> Key/Value
+
+local weakMemo = function(paramTable)
+	for _, value in pairs(paramTable) do
+		if weakResult[value] then
+			print("Weak Tables (Memoize Functions) => Recuperação (Key):", value)
+			return weakResult[value]
+		else
+			print("Weak Tables (Memoize Functions) => Inserção (Key):", value)
+			weakResult[value] = paramTable
+			return weakResult[value]
+		end
+	end
+end
+
+local weakMemoValue = { value = "A10" } -- SEMPRE um Objeto
+weakMemo(weakMemoValue)
+
+weakMemoValue = { value = "A25" } -- SEMPRE um Objeto
+weakMemo(weakMemoValue)
+
+-- Execução forçada do "Garbage Collection"
+-- Registros sem referência ativa serão deletados
+collectgarbage()
+
+weakMemoValue = { value = "A10" } -- SEMPRE um Objeto
+weakMemo(weakMemoValue)
+
 --[[
 Onde parei..
-https://www.lua.org/pil/17.html
+https://www.lua.org/pil/17.2.html
 ]]
