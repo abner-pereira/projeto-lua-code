@@ -1186,7 +1186,44 @@ collectgarbage()
 weakMemoValue = { value = "A10" } -- SEMPRE um Objeto
 weakMemo(weakMemoValue)
 
---[[
-Onde parei..
-https://www.lua.org/pil/17.2.html
-]]
+-- Object Attributes + Revisiting Tables with Default Values
+local weakDefaultsAttrib = {}
+setmetatable(weakDefaultsAttrib, { __mode = "k" }) -- 'k' -> Key; 'v' -> Value; 'kv' -> Key/Value
+
+local weakDefaultsModel = {
+	__index = function(_, key)
+		print("Weak Tables (Object Attributes) => { __INDEX } (Key):", key)
+		return weakDefaultsAttrib[key]
+	end,
+	__newindex = function(_, key, value)
+		print("Weak Tables (Object Attributes) => { __NEWINDEX } (Key):", key, "| (Value):", value)
+		weakDefaultsAttrib[key] = value
+	end
+}
+
+local weakObject = {}
+setmetatable(weakObject, weakDefaultsModel)
+
+local weakObjectKey = {} -- SEMPRE um Objeto
+weakObject[weakObjectKey] = 5
+
+weakObjectKey = {} -- SEMPRE um Objeto
+weakObject[weakObjectKey] = 10
+
+local showWeakObjects = function(paramGarbage)
+	print("Weak Tables (Object Attributes) => Garbage Collection (Executado?):", paramGarbage)
+
+	-- Execução forçada do "Garbage Collection"
+	-- Registros sem referência ativa serão deletados
+	if paramGarbage then collectgarbage() end
+
+	for key in pairs(weakDefaultsAttrib) do
+		assert(weakObject[key])
+	end
+end
+
+-- SEM Garbage Collection
+showWeakObjects(false)
+
+-- COM Garbage Collection
+showWeakObjects(true)
